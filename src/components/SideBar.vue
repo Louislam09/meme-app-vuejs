@@ -14,7 +14,7 @@
         <PosterProfile />
       </div>
       <div class="sidebar__item">
-        <Heart />
+        <Heart :memeUps="memeUps" />
       </div>
     </div>
   </div>
@@ -35,6 +35,14 @@ export default {
     Sound,
     PosterProfile,
     Heart,
+  },
+  data() {
+    return {
+      likeCount: 0,
+    };
+  },
+  props: {
+    memeUps: Number,
   },
 };
 </script>

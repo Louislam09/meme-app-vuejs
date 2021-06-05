@@ -6,16 +6,22 @@ let h;
 
 function size() { h = window.innerHeight }
 
-const onCreate = () => {
+const onCreate = (number,updateIndex) => {
 	_C = document.querySelector('.meme__container') 
-	N = _C.children.length;	
-	_C.style.setProperty('--n', N)
+    
+    if(number > 0){
+        N = number;	
+    } else {
+        N = _C.children.length;	
+    }
+
+    _C.style.setProperty('--n', N)
 	_C.addEventListener('mousedown', lock, false);
 	_C.addEventListener('mousemove', drag, false);
-	_C.addEventListener('mouseup', move, false);
+	_C.addEventListener('mouseup',(e) => move(e,updateIndex), false);
 	
 	_C.addEventListener('touchstart', lock, false);
-	_C.addEventListener('touchend', move, false);
+	_C.addEventListener('touchend', (e) => move(e,updateIndex), false);
 	_C.addEventListener('touchmove', drag, false);
 }
 
@@ -31,7 +37,7 @@ function lock(e) {
 	_C.classList.toggle('smooth', !(locked = true))
 }
 
-function move(e) {
+function move(e,updateIndex) {
 	if(locked) { 
 			let dy = unify(e).clientY - y0;
 			let s = Math.sign(dy);
@@ -39,6 +45,7 @@ function move(e) {
 
 			if((i > 0 || s < 0) && (i < N - 1 || s > 0) && f > .2){
 				_C.style.setProperty('--i', i -= s);
+                updateIndex(i);
 				f = 1 - f
 			}
 			_C.style.setProperty('--ty', '0px');
@@ -913,5 +920,6 @@ export{
 	onCreate,
 	lock,
 	move,
-	memes
+	memes,
+    i
 }

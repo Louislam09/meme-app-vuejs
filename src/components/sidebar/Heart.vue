@@ -13,10 +13,16 @@
 <script>
 export default {
   name: "Heart",
+  updated() {
+    this.heartNumber = this.memeUps;
+  },
   data: () => ({
     isFill: false,
     heartNumber: 10,
   }),
+  props: {
+    memeUps: Number,
+  },
   methods: {
     toggleHeart() {
       this.isFill = !this.isFill;
@@ -31,6 +37,11 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.heart__count {
+  font-size: 1.5rem;
+  color: khaki;
 }
 
 .fill {
