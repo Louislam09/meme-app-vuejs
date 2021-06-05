@@ -1,26 +1,52 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <Logo title="Memeo" />
+    <SideBar />
+    <Meme />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Logo from "./components/Logo.vue";
+import SideBar from "./components/SideBar.vue";
+import Meme from "./components/Meme.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Logo,
+    SideBar,
+    Meme,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  color: white;
+  background: black;
+  overflow-y: hidden;
+}
+
+.container {
+  position: relative;
+  width: 414px;
+  max-width: 414px;
+  height: 100vh;
+}
+
+i {
+  transition: all 7ms ease-in-out;
+  cursor: pointer;
+  font-size: 2.5rem;
 }
 </style>
