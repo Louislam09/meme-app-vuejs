@@ -1,9 +1,9 @@
 <template>
   <div class="sidebar__container">
     <div class="sidebar__top">
-      <div class="sidebar__item">
+      <!-- <div class="sidebar__item">
         <Profile :authorName="meme && meme.author" />
-      </div>
+      </div> -->
       <div class="sidebar__item">
         <ShareIcon />
       </div>

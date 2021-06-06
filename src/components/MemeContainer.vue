@@ -6,22 +6,23 @@
     @mousemove="drag"
     @mouseup="move"
   >
-    <Meme :meme="state.defatulMeme" v-show="state.loading" />
     <Meme
       v-for="(meme, index) in state.memeDataComputed"
       :key="index"
       :meme="meme"
     />
+    <Spinner v-show="state.loading" />
   </div>
 </template>
 
 <script setup>
 import Meme from "./Meme.vue";
+import Spinner from "./Spinner.vue";
+
 import {
   computed,
   defineProps,
   reactive,
-  watchEffect,
   ref,
   watch,
   onMounted,
@@ -48,34 +49,33 @@ const state = reactive({
     url: "http://placehold.it/210x140?text=state.numberOfItem/A",
   },
   numberOfItem: computed(() => {
-    return state.memeData.length;
+    let nItem =
+      state.memeData.length == 0 ? props.data.length : state.memeData.length;
+    return nItem;
   }),
   memeDataComputed: computed(() => {
-    return state.memeData;
+    let d = state.memeData.length == 0 ? props.data : state.memeData;
+    return d;
   }),
 });
 
-watchEffect(() => {
+watch(() => {
   if (containerRef.value) {
-    state.memeData = props.data;
     state.loading = false;
     containerRef.value.style.setProperty("--n", state.numberOfItem);
   }
 });
 
-// watch(() => {
-//   if (props.data.length > 0 && state.firstTime) {
-//     state.loading = false;
-//     state.firstTime = false;
-//     state.memeData = props.data;
-//   }
-// });
-// onCreate();
-
-const loadMoreMeme = async (index) => {
-  if (index == 4) {
+const loadMoreMeme = async () => {
+  if (state.numberOfItem - i == 1) {
+    state.loading = true;
+    console.log("loading more...");
     const dd = await props.fetchMeme();
-    state.memeData.push(...dd);
+    const newMemes =
+      state.memeData.length === 0
+        ? [...state.memeDataComputed, ...dd]
+        : [...dd];
+    state.memeData.push(...newMemes);
   }
 };
 
@@ -86,7 +86,6 @@ function size() {
 onMounted(onCreate);
 
 function onCreate() {
-  console.log("mounted is ok");
   containerRef.value.addEventListener("touchstart", lock, false);
   containerRef.value.addEventListener("touchend", move, false);
   containerRef.value.addEventListener("touchmove", drag, false);
@@ -112,14 +111,13 @@ function move(e) {
 
     if ((i > 0 || s < 0) && (i < state.numberOfItem - 1 || s > 0) && f > 0.2) {
       containerRef.value.style.setProperty("--i", (i -= s));
-      let canFetchNumber = state.numberOfItem - i;
-      loadMoreMeme(canFetchNumber);
       f = 1 - f;
     }
     containerRef.value.style.setProperty("--ty", "0px");
     containerRef.value.style.setProperty("--f", f);
     containerRef.value.classList.toggle("smooth", !(locked = false));
     y0 = null;
+    loadMoreMeme();
   }
 }
 
@@ -136,11 +134,13 @@ function drag(e) {
 
 <style scoped>
 .meme__container {
+  position: relative;
   --n: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow-y: hidden;
+
   width: 100%;
   height: 100%;
   height: calc(var(--n) * 100%);
@@ -155,7 +155,7 @@ function drag(e) {
   transition: transform calc(var(--f, 1) * 0.5s) ease-out;
 }
 
-.meme__container > div {
+.meme__container > .meme__content {
   width: 100%;
   height: 731px;
   height: calc(100% / var(--n));
