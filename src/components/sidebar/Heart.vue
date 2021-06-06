@@ -10,25 +10,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Heart",
-  updated() {
-    this.heartNumber = this.memeUps;
-  },
-  data: () => ({
-    isFill: false,
-    heartNumber: 10,
-  }),
-  props: {
-    memeUps: Number,
-  },
-  methods: {
-    toggleHeart() {
-      this.isFill = !this.isFill;
-      this.isFill ? (this.heartNumber += 1) : (this.heartNumber -= 1);
-    },
-  },
+<script setup>
+import { defineProps, reactive } from "@vue/runtime-core";
+
+const props = defineProps({
+  memeUps: Number,
+});
+
+let { isFill, heartNumber } = reactive({
+  isFill: false,
+  heartNumber: 0,
+});
+
+heartNumber = props.memeUps || 0;
+
+const toggleHeart = () => {
+  isFill = !isFill;
+  isFill ? (heartNumber += 1) : (heartNumber -= 1);
 };
 </script>
 
@@ -41,7 +39,8 @@ export default {
 
 .heart__count {
   font-size: 1.5rem;
-  color: khaki;
+  color: black;
+  color: red;
 }
 
 .fill {

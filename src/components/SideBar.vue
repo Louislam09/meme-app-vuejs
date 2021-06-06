@@ -2,49 +2,31 @@
   <div class="sidebar__container">
     <div class="sidebar__top">
       <div class="sidebar__item">
-        <Profile />
+        <Profile :authorName="meme && meme.author" />
       </div>
       <div class="sidebar__item">
-        <Reload />
+        <ShareIcon />
       </div>
       <div class="sidebar__item">
-        <Sound />
+        <DownloadIcon />
       </div>
       <div class="sidebar__item">
-        <PosterProfile />
-      </div>
-      <div class="sidebar__item">
-        <Heart :memeUps="memeUps" />
+        <Heart :memeUps="meme && meme.ups" />
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import Profile from "./sidebar/Profile";
-import Reload from "./sidebar/Reload";
-import Sound from "./sidebar/Sound";
-import PosterProfile from "./sidebar/PosterProfile";
 import Heart from "./sidebar/Heart";
+import ShareIcon from "./sidebar/ShareIcon";
+import DownloadIcon from "./sidebar/DownloadIcon";
+import { defineProps } from "vue";
 
-export default {
-  name: "SideBar",
-  components: {
-    Profile,
-    Reload,
-    Sound,
-    PosterProfile,
-    Heart,
-  },
-  data() {
-    return {
-      likeCount: 0,
-    };
-  },
-  props: {
-    memeUps: Number,
-  },
-};
+const props = defineProps({
+  meme: Object,
+});
 </script>
 
 <style scoped>
@@ -67,6 +49,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   width: 100%;
   height: 100%;

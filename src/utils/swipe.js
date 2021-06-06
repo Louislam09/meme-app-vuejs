@@ -6,7 +6,7 @@ let h;
 
 function size() { h = window.innerHeight }
 
-const onCreate = (number,updateIndex) => {
+const onCreate = (number,updateIndex,loadMoraMeme) => {
 	_C = document.querySelector('.meme__container') 
     
     if(number > 0){
@@ -18,10 +18,10 @@ const onCreate = (number,updateIndex) => {
     _C.style.setProperty('--n', N)
 	_C.addEventListener('mousedown', lock, false);
 	_C.addEventListener('mousemove', drag, false);
-	_C.addEventListener('mouseup',(e) => move(e,updateIndex), false);
+	_C.addEventListener('mouseup',(e) => move(e,updateIndex,loadMoraMeme), false);
 	
 	_C.addEventListener('touchstart', lock, false);
-	_C.addEventListener('touchend', (e) => move(e,updateIndex), false);
+	_C.addEventListener('touchend', (e) => move(e,updateIndex,loadMoraMeme), false);
 	_C.addEventListener('touchmove', drag, false);
 }
 
@@ -37,7 +37,7 @@ function lock(e) {
 	_C.classList.toggle('smooth', !(locked = true))
 }
 
-function move(e,updateIndex) {
+function move(e,updateIndex,loadMoraMeme) {
 	if(locked) { 
 			let dy = unify(e).clientY - y0;
 			let s = Math.sign(dy);
@@ -45,6 +45,8 @@ function move(e,updateIndex) {
 
 			if((i > 0 || s < 0) && (i < N - 1 || s > 0) && f > .2){
 				_C.style.setProperty('--i', i -= s);
+                let canFetchNumber = N - i;
+                loadMoraMeme(canFetchNumber);
                 updateIndex(i);
 				f = 1 - f
 			}
@@ -58,9 +60,9 @@ function move(e,updateIndex) {
 function drag(e) { 
 	e.preventDefault() 
 	if(locked) { 
-			_C.style.setProperty('--ty', `${Math.round(unify(e).clientY - y0)}px`)
+        _C.style.setProperty('--ty', `${Math.round(unify(e).clientY - y0)}px`)
 
-	 }
+    }
 }
 
 const memes = [

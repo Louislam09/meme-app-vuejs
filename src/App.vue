@@ -1,14 +1,13 @@
 <template>
   <div class="container">
     <Logo title="Memeo" />
-    <SideBar :memeUps="memeUps" />
-    <MemeContainer :data="memes" :setCurrentMeme="setCurrentMeme" />
+    <MemeContainer :data="memes" :fetchMeme="fetchMeme" />
   </div>
 </template>
 
 <script>
 import Logo from "./components/Logo.vue";
-import SideBar from "./components/SideBar.vue";
+// import SideBar from "./components/SideBar.vue";
 import MemeContainer from "./components/MemeContainer.vue";
 const apiUrl = "https://meme-api.herokuapp.com/gimme";
 const goodSubReddits = [
@@ -45,10 +44,9 @@ const fetchMeme = async () => {
   const sr = Math.floor(Math.random() * 2);
   const selected = sr == 0 ? gSubReddit : rSubReddit;
 
-  const res = await fetch(`${apiUrl}/${selected}/30`);
+  const res = await fetch(`${apiUrl}/${selected}/5`);
   const results = await res.json();
   const { memes } = await results;
-  console.log(selected);
   return memes;
 };
 
@@ -56,7 +54,6 @@ export default {
   name: "App",
   components: {
     Logo,
-    SideBar,
     MemeContainer,
   },
   data: () => ({
@@ -68,10 +65,7 @@ export default {
     this.memes = dd;
   },
   methods: {
-    setCurrentMeme(number) {
-      this.memeUps = this.memes[number].ups;
-      console.log(this.memeUps);
-    },
+    fetchMeme,
   },
 };
 </script>
@@ -88,8 +82,6 @@ body {
   display: grid;
   place-items: center;
   color: white;
-  /* background: #00000086; */
-  /* background: linear-gradient(to bottom, pink, orange); */
   background: rgb(238, 174, 202);
   background: radial-gradient(
     circle,
@@ -100,18 +92,17 @@ body {
 }
 
 .container {
-  /* position: relative; */
   width: auto;
   max-width: 614px;
   height: 100vh;
-  /* border: 1px solid red; */
 }
 
 i {
   transition: all 7ms ease-in-out;
   cursor: pointer;
   font-size: 2.5rem;
-  color: khaki;
+  /* color: khaki; */
+  color: black;
   font-weight: bold;
 }
 </style>

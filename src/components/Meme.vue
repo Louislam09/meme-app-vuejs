@@ -1,22 +1,39 @@
 <template>
-  <img class="meme__image" :src="imageUrl" :alt="title" />
+  <div class="meme__content">
+    <SideBar :meme="state.defatulMeme" />
+    <img class="meme__image" :src="state.defatulMeme.url" :alt="title" />
+  </div>
 </template>
 
-<script>
-export default {
-  name: "Meme",
-  props: {
-    imageUrl: String,
-    title: String,
+<script setup>
+import { defineProps, reactive } from "vue";
+import SideBar from "./SideBar.vue";
+
+const props = defineProps({
+  meme: Object,
+});
+
+const state = reactive({
+  defatulMeme: {
+    author: "Testing",
+    ups: 0,
+    url: "http://placehold.it/210x140?text=N/A",
   },
-};
+});
+
+state.defatulMeme = props.meme;
 </script>
 
 <style scoped>
+.meme__content {
+  position: relative;
+}
+
 img {
+  border: 2px solid white;
   width: 100%;
-  height: 731px;
-  height: calc(100% / var(--n));
+  /* height: 731px; */
+  height: 100%;
   object-fit: contain;
   pointer-events: none;
   background: radial-gradient(
